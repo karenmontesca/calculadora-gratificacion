@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Gratificación en Perú</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333333;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            color: #555555;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .info {
+            font-size: 0.9em;
+            color: #777777;
+        }
+        .result {
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 20px;
+            color: #333333;
+        }
+        .error {
+            color: red;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Gratificación en Perú</h1>
+        <label for="sueldo">Sueldo mensual (S/):</label>
+        <input type="number" id="sueldo" placeholder="Ingresa tu sueldo mensual" required>
+
+        <label for="mesesTrabajados">Meses trabajados en el semestre:</label>
+        <select id="mesesTrabajados">
+            <option value="">Selecciona...</option>
+            <option value="1">1 mes</option>
+            <option value="2">2 meses</option>
+            <option value="3">3 meses</option>
+            <option value="4">4 meses</option>
+            <option value="5">5 meses</option>
+            <option value="6">6 meses</option>
+        </select>
+        <p class="info">Nota: Indica solo los meses trabajados en el semestre actual (enero a junio o julio a diciembre), no el tiempo total en la empresa.</p>
+
+        <label for="regimen">Régimen laboral:</label>
+        <select id="regimen">
+            <option value="">Selecciona...</option>
+            <option value="general">General</option>
+            <option value="pequeña_empresa">Pequeña Empresa</option>
+        </select>
+
+        <button onclick="calcular()">Calcular Gratificación</button>
+
+        <div id="resultado" class="result"></div>
+        <div id="error" class="error"></div>
+    </div>
+
+    <script>
+        function calcular() {
+            const sueldo = parseFloat(document.getElementById('sueldo').value);
+            const mesesTrabajados = parseInt(document.getElementById('mesesTrabajados').value);
+            const regimen = document.getElementById('regimen').value;
+
+            if (isNaN(sueldo) || !mesesTrabajados || !regimen) {
+                document.getElementById('error').textContent = "Por favor, completa todos los campos correctamente.";
+                document.getElementById('resultado').textContent = '';
+                return;
+            }
+
+            if (mesesTrabajados < 1 || mesesTrabajados > 6) {
+                document.getElementById('error').textContent = "El número de meses trabajados debe estar entre 1 y 6.";
+                document.getElementById('resultado').textContent = '';
+                return;
+            }
+
+            let gratificacion = (sueldo / 6) * mesesTrabajados;
+            let bonificacion = 0;
+
+            if (regimen === 'general') {
+                bonificacion = gratificacion * 0.09;
+            } else if (regimen === 'pequeña_empresa') {
+                bonificacion = 0; // No hay bonificación extra para pequeñas empresas.
+            } else {
+                document.getElementById('error').textContent = "Régimen laboral no válido. Usa 'general' o 'pequeña_empresa'.";
+                document.getElementById('resultado').textContent = '';
+                return;
+            }
+
+            const total = gratificacion + bonificacion;
+            document.getElementById('error').textContent = '';
+            document.getElementById('resultado').textContent = `Te corresponde una gratificación de: S/ ${total.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
